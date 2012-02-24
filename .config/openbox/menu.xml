@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openbox_menu>
+	<menu id="root-menu" label="OpenBox 3">
+		<menu id="7" label="Multimedia">
+			<item label="VLC">
+				<action name="Execute">
+					<execute>
+						vlc
+					</execute>
+				</action>
+			</item>
+			<item label="ncmpcpp">
+				<action name="Execute">
+					<execute>
+						urxvt -e ncmpcpp
+					</execute>
+				</action>
+			</item>
+			<item label="ALSA mixer">
+				<action name="Execute">
+					<execute>
+						urxvt -e alsamixer
+					</execute>
+				</action>
+			</item>
+		</menu>
+		<menu id="5" label="Network">
+			<item label="Firefox">
+				<action name="Execute">
+					<execute>
+						exo-open --launch WebBrowser
+					</execute>
+				</action>
+			</item>
+			<item label="Skype">
+				<action name="Execute">
+					<execute>
+						skype
+					</execute>
+				</action>
+			</item>
+			<item label="irssi">
+				<action name="Execute">
+					<execute>
+						urxvt -e irssi
+					</execute>
+				</action>
+			</item>
+		</menu>
+		<menu id="19" label="Shells">
+			<item label="rxvt-unicode">
+				<action name="Execute">
+					<execute>
+						urxvt
+					</execute>
+				</action>
+			</item>
+			<item label="Xterm">
+				<action name="Execute">
+					<execute>
+						xterm
+					</execute>
+				</action>
+			</item>
+		</menu>
+		<menu id="37" label="System">
+			<menu id="36" label="Settings">
+				<menu id="35" label="Xfce">
+					<item label="Preferred Applications">
+						<action name="Execute">
+							<execute>
+								exo-preferred-applications
+							</execute>
+						</action>
+					</item>
+					<item label="Removable Drives and Media">
+						<action name="Execute">
+							<execute>
+								thunar-volman-settings
+							</execute>
+						</action>
+					</item>
+				</menu>
+				<item label="Nitrogen">
+					<action name="Execute">
+						<execute>
+							nitrogen
+						</execute>
+					</action>
+				</item>
+				<item label="Customize Look and Feel">
+					<action name="Execute">
+						<execute>
+							lxappearance
+						</execute>
+					</action>
+				</item>
+				<item label="Openbox Configuration Manager">
+					<action name="Execute">
+						<execute>
+							obconf
+						</execute>
+					</action>
+				</item>
+				<item label="Panel tint2">
+					<action name="Execute">
+						<execute>
+							tint2conf
+						</execute>
+					</action>
+				</item>
+				<item label="NVIDIA X Server Settings">
+					<action name="Execute">
+						<execute>
+							nvidia-settings
+						</execute>
+					</action>
+				</item>
+			</menu>
+			<item label="Bulk Rename">
+				<action name="Execute">
+					<execute>
+						/usr/lib/Thunar/ThunarBulkRename
+					</execute>
+				</action>
+			</item>
+		</menu>
+		<menu id="38" label="Utilities">
+			<item label="File Manager">
+				<action name="Execute">
+					<execute>
+						exo-open --launch FileManager
+					</execute>
+				</action>
+			</item>
+			<item label="Leafpad">
+				<action name="Execute">
+					<execute>
+						leafpad
+					</execute>
+				</action>
+			</item>
+			<item label="Sublime Text 2">
+				<action name="Execute">
+					<execute>
+						&quot;/opt/Sublime Text 2/sublime_text&quot;
+					</execute>
+				</action>
+			</item>
+			<item label="TrueCrypt">
+				<action name="Execute">
+					<execute>
+						truecrypt
+					</execute>
+				</action>
+			</item>
+			<item label="tint2">
+				<action name="Execute">
+					<execute>
+						tint2
+					</execute>
+				</action>
+			</item>
+			<item label="Terminal Emulator">
+				<action name="Execute">
+					<execute>
+						exo-open --launch TerminalEmulator
+					</execute>
+				</action>
+			</item>
+			<item label="Xarchiver">
+				<action name="Execute">
+					<execute>
+						xarchiver
+					</execute>
+				</action>
+			</item>
+			<item label="7-Zip FM">
+				<action name="Execute">
+					<execute>
+						7zFM
+					</execute>
+				</action>
+			</item>
+		</menu>
+		<separator/>
+		<menu id="40" label="OpenBox">
+			<menu id="client-list-menu"/>
+			<item label="Reconfigure">
+				<action name="Reconfigure"/>
+			</item>
+			<separator/>
+			<item label="Exit">
+				<action name="Exit"/>
+			</item>
+		</menu>
+	</menu>
+</openbox_menu>

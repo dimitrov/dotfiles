@@ -1,0 +1,4 @@
+# Write your default config options here!
+font=/usr/share/fonts/arial.ttf
+subcp=cp1251
+#subfont-encoding=windows-1251
