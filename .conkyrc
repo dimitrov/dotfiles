@@ -23,11 +23,13 @@ xftalpha 0.9
 # - Window specifications - #
 #############################
 own_window yes
+own_window_title conky
+own_window_class conky
 own_window_transparent yes
-own_window_type override
+own_window_type normal
 own_window_hints undecorate,sticky,skip_taskbar,skip_pager 
-own_window_argb_visual yes
-#own_window_argb_value 100
+own_window_argb_visual no
+own_window_argb_value 100
 
 alignment tl
 gap_x 50

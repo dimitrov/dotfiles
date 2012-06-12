@@ -16,7 +16,8 @@
 #
 #xfce-mcs-manager &
 
-xcompmgr -CcfF -I-.05 -O-.10 -D3 -t-1 -l-3 -r4.2 -o.5 -m.85 &
+compton -CcfF -I-.05 -O-.10 -D3 -t-1 -l-3 -r4.2 -o.5 -m.85 -B conky &
+
 nitrogen --restore &
 thunar --daemon &
 tint2 &
