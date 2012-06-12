@@ -1,47 +1,66 @@
-#avoid flicker
+######################
+# - Conky settings - #
+######################
+update_interval 1
+total_run_times 0
+net_avg_samples 1
+cpu_avg_samples 1
+
+imlib_cache_size 0
 double_buffer yes
+no_buffers yes
 
-#own window to run simultanious 2 or more conkys
+#####################
+# - Text settings - #
+#####################
+use_xft yes
+xftfont Dinreg:size=180
+override_utf8_locale yes
+text_buffer_size 2048
+xftalpha 0.9
+
+#############################
+# - Window specifications - #
+#############################
 own_window yes
-own_window_transparent no
-own_window_type normal
+own_window_transparent yes
+own_window_type override
 own_window_hints undecorate,sticky,skip_taskbar,skip_pager 
-
-#enable real transparency
 own_window_argb_visual yes
-own_window_argb_value 255
+#own_window_argb_value 100
 
-#borders
-draw_borders no
-border_margin 1
+alignment tl
+gap_x 50
+gap_y 80
+minimum_size 290 280
 
-#shades
+
+default_bar_size 60 8
+
+#########################
+# - Graphics settings - #
+#########################
 draw_shades no
 
-#position
-gap_x 5
-gap_y 5
-alignment top_left
+default_color FFFFFF
+default_shade_color 1d1d1d
+color0 ffffff
+color1 ffffff
+#color2 4c9ae4
+#color2 27738a
+color2 3baed1
 
-#behaviour
-update_interval 1
 
-#colour
-default_color 4c9ae4
-own_window_colour 000000
-
-#font
-use_xft yes
-xftfont kroeger 05_55 caps:size=6
-
-#to prevent window from moving
-use_spacer none
-minimum_size 1280 0
-
-#mpd
-mpd_host localhost
-mpd_port 6600
-
+#lua_load ~/.conky/conkybg.lua
+#lua_draw_hook_pre conky_draw_bg
 
 TEXT
-${voffset 1}${image ~/.conky/arch.png -p 2,1}     kernel: ${color FFFFFF}${kernel} | ${color}cpu: ${color FFFFFF}${font}${cpu}% ${color}mem: ${color FFFFFF}${font}${mem} | ${color}cpu temp: ${color FFFFFF}${execi 30 sensors | grep 'CPU Temp' | cut -d ' ' -f 6} | ${color}uptime: ${color FFFFFF}${font}${uptime_short} | ${color}up: ${color FFFFFF}${upspeedf eth0}Kb/s ${color}down: ${color FFFFFF}${font}${downspeedf eth0}Kb/s | ${color}home: ${color FFFFFF}${font}${fs_free /home} | ${color}mpd: ${color FFFFFF}${font}${mpd_artist} - ${mpd_title}
+${voffset -220}${font Dinreg:size=13}${color2}${if_match ${time %H}<12}AM${else}${if_match ${time %H}>12}PM${endif}${endif} ${color}${font}
+${voffset -350}${time %I}
+${color2}${voffset -170}${time %M}${color}
+${voffset -220}${font Droid Sans:size=16}${color2}|${color} ${time %A}
+${color2}|${color} ${time %B .%d}
+
+
+
+
