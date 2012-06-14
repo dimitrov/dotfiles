@@ -15,6 +15,15 @@ autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 
-inoremap <Nul> <C-p>
+" autocomplete
+inoremap <Nul> <C-x><C-o>
+
+" build
 nmap <F4> :w<CR>:make<CR>:cw<CR>
+
+" NERDTree
 nmap <silent> <special> <F2> :NERDTreeToggle<RETURN>
+
+" zencoding
+let g:user_zen_expandabbr_key = '<c-e>' 
+let g:use_zen_complete_tag = 1
