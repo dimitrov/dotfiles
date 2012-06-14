@@ -1,9 +1,16 @@
-"let s:mx = '\([+>]\|<\+\)\{-}\((*\)\{-}\([@#.]\{-}[a-zA-Z\!][a-zA-Z0-9:_\!\-$]*\|'
-let s:mx = '\([+>]\|<\+\)\{-}\s*\((*\)\{-}\s*\([@#.]\{-}[a-zA-Z\!][a-zA-Z0-9:_\!\-$]*\|'
-\       .'{.\{-}}[ \t\r\n}]*\)\(\%(\%(#{[{}a-zA-Z0-9_\-\$]\+\|'
-\       .'#[a-zA-Z0-9_\-\$]\+\)\|\%(\[[^\]]\+\]\)\|'
-\       .'\%(\.{[{}a-zA-Z0-9_\-\$]\+\|'
-\       .'\.[a-zA-Z0-9_\-\$]\+\)\)*\)\%(\({[^}]\+}\+\)\)\{0,1}\%(\*\([0-9]\+\)\)\{0,1}\(\%()\%(\*[0-9]\+\)\{0,1}\)*\)'
+let s:mx = '\([+>]\|<\+\)\{-}\s*'
+\     .'\((*\)\{-}\s*'
+\       .'\([@#.]\{-}[a-zA-Z\!][a-zA-Z0-9:_\!\-$]*\|{\%([^$}]\+\|\$#\|\${\w\+}\|\$\+\)*}[ \t\r\n}]*\)'
+\       .'\('
+\         .'\%('
+\           .'\%(#{[{}a-zA-Z0-9_\-\$]\+\|#[a-zA-Z0-9_\-\$]\+\)'
+\           .'\|\%(\[[^\]]\+\]\)'
+\           .'\|\%(\.{[{}a-zA-Z0-9_\-\$]\+\|\.[a-zA-Z0-9_\-\$]\+\)'
+\         .'\)*'
+\       .'\)'
+\       .'\%(\({\%([^$}]\+\|\$#\|\${\w\+}\|\$\+\)*}\)\)\{0,1}'
+\         .'\%(\*\([0-9]\+\)\)\{0,1}'
+\     .'\(\%()\%(\*[0-9]\+\)\{0,1}\)*\)'
 
 function! zencoding#lang#html#findTokens(str)
   let str = a:str
@@ -296,6 +303,14 @@ function! zencoding#lang#html#toString(settings, current, type, inline, filters,
   let current_name = substitute(current_name, '\$$', itemno+1, '')
 
   let str = ''
+  if len(current_name) == 0
+    let text = current.value[1:-2]
+    let text = substitute(text, '\%(\\\)\@\<!\(\$\+\)\([^{#]\|$\)', '\=printf("%0".len(submatch(1))."d", itemno+1).submatch(2)', 'g')
+    let text = substitute(text, '\${nr}', "\n", 'g')
+    let text = substitute(text, '\\\$', '$', 'g')
+    return text
+  endif
+  if len(current_name) > 0
   let str .= '<' . current_name
   for attr in keys(current.attr)
     let val = current.attr[attr]
@@ -316,17 +331,26 @@ function! zencoding#lang#html#toString(settings, current, type, inline, filters,
     let str .= " />"
   else
     let str .= ">"
-    let str .= current.value[1:-2]
+    let text = current.value[1:-2]
+    let text = substitute(text, '\%(\\\)\@\<!\(\$\+\)\([^{#]\|$\)', '\=printf("%0".len(submatch(1))."d", itemno+1).submatch(2)', 'g')
+    let text = substitute(text, '\${nr}', "\n", 'g')
+    let text = substitute(text, '\\\$', '$', 'g')
+    let str .= text
     let nc = len(current.child)
+    let dr = 0
     if nc > 0
       for n in range(nc)
         let child = current.child[n]
-        if len(current_name) > 0 && stridx(','.settings.html.inline_elements.',', ','.current_name.',') == -1
+        if child.multiplier > 1
+          let str .= "\n" . indent
+          let dr = 1
+		elseif len(current_name) > 0 && stridx(','.settings.html.inline_elements.',', ','.current_name.',') == -1
           if nc > 1 || (len(child.name) > 0 && stridx(','.settings.html.inline_elements.',', ','.child.name.',') == -1)
             let str .= "\n" . indent
+            let dr = 1
           endif
         endif
-        let inner = zencoding#toString(child, type, 0, filters)
+        let inner = zencoding#toString(child, type, 0, filters, itemno)
         let inner = substitute(inner, "\n", "\n" . indent, 'g')
         let inner = substitute(inner, "\n" . indent . '$', '', 'g')
         let str .= inner
@@ -334,23 +358,49 @@ function! zencoding#lang#html#toString(settings, current, type, inline, filters,
     else
       let str .= '${cursor}'
     endif
-    if nc > 0 && stridx(','.settings.html.inline_elements.',', ','.current_name.',') == -1
-      if nc > 1 || (nc == 1 && len(current.child[0].name) > 0 && stridx(','.settings.html.inline_elements.',', ','.current.child[0].name.',') == -1)
-        let str .= "\n"
-      endif
+    if dr
+      let str .= "\n"
     endif
     let str .= "</" . current_name . ">"
   endif
   if len(comment) > 0
     let str .= "\n<!-- /" . comment . " -->"
   endif
-  if len(current_name) > 0 && (current.multiplier > 0 && !empty(current.parent) && len(current.parent.child) > 1)|| stridx(','.settings.html.block_elements.',', ','.current_name.',') != -1
+  if len(current_name) > 0 && current.multiplier > 0 || stridx(','.settings.html.block_elements.',', ','.current_name.',') != -1
     let str .= "\n"
   endif
   return str
 endfunction
 
 function! zencoding#lang#html#imageSize()
+  let img_region = zencoding#util#searchRegion('<img\s', '>')
+  if !zencoding#util#regionIsValid(img_region) || !zencoding#util#cursorInRegion(img_region)
+    return
+  endif
+  let content = zencoding#util#getContent(img_region)
+  if content !~ '^<img[^><]\+>$'
+    return
+  endif
+  let current = zencoding#lang#html#parseTag(content)
+  if empty(current) || !has_key(current.attr, 'src')
+    return
+  endif
+  let fn = current.attr.src
+  if fn !~ '^\(/\|http\)'
+    let fn = simplify(expand('%:h') . '/' . fn)
+  endif
+
+  let [width, height] = zencoding#util#getImageSize(fn)
+  if width == -1 && height == -1
+    return
+  endif
+  let current.attr.width = width
+  let current.attr.height = height
+  let html = zencoding#toString(current, 'html', 1)
+  call zencoding#util#setContent(img_region, html)
+endfunction
+
+function! zencoding#lang#html#encodeImage()
   let img_region = zencoding#util#searchRegion('<img\s', '>')
   if !zencoding#util#regionIsValid(img_region) || !zencoding#util#cursorInRegion(img_region)
     return
@@ -542,7 +592,7 @@ function! zencoding#lang#html#balanceTag(flag) range
 endfunction
 
 function! zencoding#lang#html#moveNextPrev(flag)
-  let pos = search('\%(</\w\+\)\@<!\zs><\/\|\(""\)\|^\s*$', a:flag ? 'Wpb' : 'Wp')
+  let pos = search('\%(</\w\+\)\@<!\zs><\/\|\(""\)\|^\(\s*\)$', a:flag ? 'Wpb' : 'Wp')
   if pos == 3
     startinsert!
   elseif pos != 0
