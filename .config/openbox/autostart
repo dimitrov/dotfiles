@@ -16,10 +16,11 @@
 #
 #xfce-mcs-manager &
 
-compton -CcfF -I-.05 -O-.10 -D3 -t-1 -l-3 -r4.2 -o.5 -m.85 -B conky &
+
 
 nitrogen --restore &
 thunar --daemon &
 tint2 &
-conky &
+sleep 5 && conky & # make sure compton is loaded to prevent shadowing
 setxkbmap -model pc105 -layout 'us,bg' -variant ',phonetic' -option grp:alt_shift_toggle &
+compton -CcfF -I-.05 -O-.10 -D3 -t-1 -l-3 -r4.2 -o.5 -m.85 -B conky &
