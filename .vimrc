@@ -4,7 +4,7 @@
 
 syn on             " Syntax on
 set number         " Line numbers
-set smartindent    "
+set smartindent    
 set tabstop=4      " Use 4 space identation
 set shiftwidth=4   
 set expandtab      
@@ -32,9 +32,12 @@ call vundle#rc()
 
 Bundle 'gmarik/vundle'
 Bundle 'scrooloose/nerdtree'
+Bundle 'scrooloose/syntastic'
 Bundle 'Lokaltog/vim-powerline'
 Bundle 'mattn/zencoding-vim'
 Bundle 'ervandew/supertab'
+Bundle 'othree/html5.vim'
+Bundle 'hail2u/vim-css3-syntax'
 
 filetype plugin indent on
 
@@ -43,7 +46,13 @@ filetype plugin indent on
 "
 
 " autocomplete
-inoremap <Nul> <C-x><C-o>
+"inoremap <Nul> <C-x> <C-o>
+inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
+            \ "\<lt>C-n>" :
+            \ "\<lt>C-x>\<lt>C-o><c-r>=pumvisible() ?" .
+            \ "\"\\<lt>c-n>\\<lt>c-p>\\<lt>c-n>\" :" .
+            \ "\" \\<lt>bs>\\<lt>C-n>\"\<CR>"
+imap <C-@> <C-Space>
 
 " build
 nmap <F4> :w<CR>:make<CR>:cw<CR>
