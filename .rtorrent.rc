@@ -72,7 +72,7 @@ use_udp_trackers = no
 # outgoing connections but retries with encryption if they fail, preferring
 # plaintext to RC4 encryption after the encrypted handshake
 #
-# encryption = allow_incoming,enable_retry,prefer_plaintext
+encryption = allow_incoming,try_outgoing,enable_retry
 
 # Enable DHT support for trackerless torrents or when all trackers are down.
 # May be set to "disable" (completely disable DHT), "off" (do not start DHT),
@@ -106,3 +106,8 @@ peer_exchange = yes
 # before forcing. Overworked systems might need lower values to get a
 # decent hash checking rate.
 #hash_max_tries = 10
+
+# Colors
+done_fg_color = 2
+active_fg_color = 4
+
