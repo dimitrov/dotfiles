@@ -99,6 +99,8 @@ Bundle 'lordm/vim-browser-reload-linux'
 
 Bundle 'altercation/vim-colors-solarized'
 
+Bundle 'rodjek/vim-puppet'
+
 filetype plugin indent on
 
 
