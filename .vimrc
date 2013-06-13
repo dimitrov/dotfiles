@@ -276,3 +276,8 @@ function! ToggleColorColumn()
 endfunction
 
 let g:used_javascript_libs = 'jquery,underscore,angularjs'
+
+"au BufNewFile,BufRead *.pp set filetype=puppet
+
+" Resize splits when the window is resized
+au VimResized * :wincmd =
